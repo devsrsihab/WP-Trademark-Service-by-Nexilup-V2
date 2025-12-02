@@ -1,0 +1,373 @@
+<?php
+if ( ! defined('ABSPATH') ) exit;
+
+if ( empty($order_id) ) {
+    echo "<div class='tm-error'>Invalid order.</div>";
+    return;
+}
+
+$order = wc_get_order($order_id);
+
+if ( ! $order ) {
+    echo "<div class='tm-error'>Order not found.</div>";
+    return;
+}
+
+$order_number  = $order->get_order_number();
+$order_date    = $order->get_date_created();
+$billing_email = $order->get_billing_email();
+$total         = $order->get_total();
+$currency      = $order->get_currency();
+$payment_title = $order->get_payment_method_title();
+$billing_addr  = $order->get_formatted_billing_address();
+?>
+
+<div class="tm-order-page tm-step3">
+
+    <!-- 3-step bar -->
+    <div class="tm-progress">
+        <div class="tm-progress-line"></div>
+
+        <div class="tm-progress-step is-active">
+            <span class="dot"></span>
+            <span>Trademark Information</span>
+        </div>
+
+        <div class="tm-progress-step is-active">
+            <span class="dot"></span>
+            <span>Confirm Order</span>
+        </div>
+
+        <div class="tm-progress-step is-active">
+            <span class="dot"></span>
+            <span>Order Receipt</span>
+        </div>
+    </div>
+
+    <div class="tm-step3-container">
+        <!-- Success headline -->
+        <div class="tm-success-message">
+            <h2>🎉 Order Received</h2>
+            <p>Thank you for your order. We’ve sent a confirmation email with your order details.</p>
+        </div>
+
+        <!-- Top order info (like WooCommerce thank you) -->
+        <div class="tm-order-box">
+            <h3 class="tm-box-title">Order summary</h3>
+            <div class="tm-order-meta-grid">
+                <div class="tm-meta-row">
+                    <span class="tm-meta-label">Order number</span>
+                    <span class="tm-meta-value"><?php echo esc_html( $order_number ); ?></span>
+                </div>
+                <div class="tm-meta-row">
+                    <span class="tm-meta-label">Date</span>
+                    <span class="tm-meta-value">
+                        <?php echo esc_html( wc_format_datetime( $order_date ) ); ?>
+                    </span>
+                </div>
+                <?php if ( $billing_email ) : ?>
+                <div class="tm-meta-row">
+                    <span class="tm-meta-label">Email</span>
+                    <span class="tm-meta-value"><?php echo esc_html( $billing_email ); ?></span>
+                </div>
+                <?php endif; ?>
+                <div class="tm-meta-row">
+                    <span class="tm-meta-label">Total</span>
+                    <span class="tm-meta-value">
+                        <?php echo wp_kses_post( wc_price( $total, [ 'currency' => $currency ] ) ); ?>
+                    </span>
+                </div>
+                <?php if ( $payment_title ) : ?>
+                <div class="tm-meta-row">
+                    <span class="tm-meta-label">Payment method</span>
+                    <span class="tm-meta-value"><?php echo esc_html( $payment_title ); ?></span>
+                </div>
+                <?php endif; ?>
+            </div>
+        </div>
+
+<!-- Trademark items -->
+<div class="tm-order-items">
+    <h3 class="tm-box-title">Trademark details</h3>
+
+    <?php foreach ( $order->get_items() as $item ) : ?>
+        <div class="tm-item">
+            <div class="tm-item-main">
+
+<<<<<<< HEAD
+                <div class="tm-item-text">
+
+                    <!-- MARK TITLE -->
+                    <div class="tm-item-title">
+                        <?php echo esc_html( $item->get_meta( 'tm_mark_text' ) ); ?>
+=======
+                            <!-- <div class="tm-item-row">
+                                <span class="label">Type:</span>
+                                <span class="value">
+                                    <?php echo esc_html( $item->get_meta( 'tm_type' ) ); ?>
+                                </span>
+                            </div> -->
+
+                            <div class="tm-item-row">
+                                <span class="label">Mark:</span>
+                                <span class="value">
+                                    <?php echo esc_html( $item->get_meta( 'tm_mark_text' ) ); ?>
+                                </span>
+                            </div>
+
+                            <div class="tm-item-row">
+                            <span class="label">Classes:</span>
+<span class="value">
+    <?php
+
+    function tm_normalize_json($value) {
+
+        if (!is_string($value)) return [];
+
+        // 1️⃣ Remove ALL wrapping quotes repeatedly
+        while (
+            (substr($value, 0, 1) === '"' && substr($value, -1) === '"') ||
+            (substr($value, 0, 1) === "'" && substr($value, -1) === "'")
+        ) {
+            $value = substr($value, 1, -1);
+        }
+
+        // 2️⃣ Unescape backslashes
+        $value = stripcslashes($value);
+
+        // 3️⃣ First decode
+        $decoded = json_decode($value, true);
+
+        // 4️⃣ If still NULL, try decoding again
+        if ($decoded === null && (str_contains($value, '[') || str_contains($value, '{'))) {
+            $decoded = json_decode(stripcslashes($value), true);
+        }
+
+        // 5️⃣ Final cleanup
+        if ($decoded === null) {
+            $decoded = json_decode(trim($value, "\"'"), true);
+        }
+
+        return is_array($decoded) ? $decoded : [];
+    }
+
+    // NOW CALL THE FUNCTION CORRECTLY
+    $class_list = tm_normalize_json($item->get_meta( 'tm_tm_class_list' ));
+
+    echo !empty($class_list)
+        ? esc_html(implode('-', $class_list))
+        : '—';
+
+    ?>
+</span>
+
+                            </div>
+                        
+                            <div class="tm-item-row">
+                                <span class="label">Goods / Services:</span>
+                                <span class="value">
+                                    <?php echo esc_html( $item->get_meta( 'tm_tm_goods' ) ); ?>
+                                </span>
+                            </div>
+
+                            <div class="tm-item-row">
+                                <span class="label">Country:</span>
+                                <span class="value">
+                                    <?php echo esc_html( $item->get_meta( 'tm_country_iso' ) ); ?>
+                                </span>
+                            </div>
+
+                            <div class="tm-item-row">
+                                <span class="label">Line total:</span>
+                                <span class="value">
+                                    <?php echo wp_kses_post( $order->get_formatted_line_subtotal( $item ) ); ?>
+                                </span>
+                            </div>
+                        </div>
+
+                        <?php if ( $item->get_meta( 'tm_logo_url' ) ) : ?>
+                            <div class="tm-item-logo">
+                                <img
+                                    src="<?php echo esc_url( $item->get_meta( 'tm_logo_url' ) ); ?>"
+                                    alt="Trademark logo"
+                                />
+                            </div>
+                        <?php endif; ?>
+>>>>>>> 76c7624a8e57ec015713f48ec76e283d03bf02a5
+                    </div>
+
+                    <!-- TYPE -->
+                    <div class="tm-item-row">
+                        <span class="label">Type:</span>
+                        <span class="value" style="text-transform: capitalize;">
+                            <?php echo esc_html( $item->get_meta( 'tm_type' ) ); ?>
+                        </span>
+                    </div>
+
+                    <!-- MARK -->
+                    <div class="tm-item-row">
+                        <span class="label">Mark:</span>
+                        <span class="value">
+                            <?php echo esc_html( $item->get_meta( 'tm_mark_text' ) ); ?>
+                        </span>
+                    </div>
+
+                    <!-- CLASSES -->
+                    <div class="tm-item-row">
+                        <span class="label">Classes:</span>
+                        <span class="value">
+
+                            <?php
+                            // Safe JSON normalize
+                            if (!function_exists('tm_normalize_json')) {
+                                function tm_normalize_json($value) {
+                                    if (!is_string($value)) return [];
+
+                                    while (
+                                        (substr($value, 0, 1) === '"' && substr($value, -1) === '"') ||
+                                        (substr($value, 0, 1) === "'" && substr($value, -1) === "'")
+                                    ) {
+                                        $value = substr($value, 1, -1);
+                                    }
+
+                                    $value = stripcslashes($value);
+                                    $decoded = json_decode($value, true);
+
+                                    if ($decoded === null && (str_contains($value, '[') || str_contains($value, '{'))) {
+                                        $decoded = json_decode(stripcslashes($value), true);
+                                    }
+
+                                    if ($decoded === null) {
+                                        $decoded = json_decode(trim($value, "\"'"), true);
+                                    }
+
+                                    return is_array($decoded) ? $decoded : [];
+                                }
+                            }
+
+                            // Get raw values
+                            $raw_list     = $item->get_meta('tm_tm_class_list');
+                            $class_count  = intval($item->get_meta('tm_tm_class_count'));
+                            $class_list   = tm_normalize_json($raw_list);
+
+                            // FINAL LOGIC: If empty → fallback to class_count
+                            if (!empty($class_list)) {
+                                echo esc_html(implode('-', $class_list));
+                            } else {
+                                echo esc_html($class_count . ' class' . ($class_count > 1 ? 'es' : ''));
+                            }
+                            ?>
+                        </span>
+                    </div>
+
+                    <!-- GOODS -->
+                    <div class="tm-item-row">
+                        <span class="label">Goods / Services:</span>
+                        <span class="value">
+                            <?php echo esc_html( $item->get_meta( 'tm_tm_goods' ) ); ?>
+                        </span>
+                    </div>
+
+                    <!-- COUNTRY -->
+                    <div class="tm-item-row">
+                        <span class="label">Country:</span>
+                        <span class="value">
+                            <?php echo esc_html( $item->get_meta( 'tm_country_iso' ) ); ?>
+                        </span>
+                    </div>
+
+                    <!-- LINE TOTAL -->
+                    <div class="tm-item-row">
+                        <span class="label">Line total:</span>
+                        <span class="value">
+                            <?php echo wp_kses_post( $order->get_formatted_line_subtotal( $item ) ); ?>
+                        </span>
+                    </div>
+
+                </div>
+
+                <!-- TRADEMARK IMAGE IF EXISTS -->
+                <?php 
+                $tm_logo_url = $item->get_meta('tm_tm_logo_url'); 
+
+                if ( !empty($tm_logo_url) ) : ?>
+                    <div class="tm-item-logo" style="margin-left:20px;">
+                        <img
+                            src="<?php echo esc_url( $tm_logo_url ); ?>"
+                            alt="Trademark Logo"
+                            style="
+                                max-width: 150px;
+                                height: auto;
+                                border: 1px solid #ddd;
+                                border-radius: 6px;
+                                padding: 6px;
+                                background: #fff;
+                                box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+                            "
+                        />
+                    </div>
+                <?php endif; ?>
+
+
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+
+
+        <!-- Totals + billing -->
+        <!-- <div class="tm-bottom-grid">
+            <div class="tm-total-box">
+                <h3 class="tm-box-title">Order totals</h3>
+                <table class="tm-totals-table">
+                    <tbody>
+                        <tr>
+                            <th>Subtotal</th>
+                            <td><?php echo wp_kses_post( wc_price( $order->get_subtotal(), [ 'currency' => $currency ] ) ); ?></td>
+                        </tr>
+                        <?php if ( $order->get_total_tax() > 0 ) : ?>
+                        <tr>
+                            <th>Tax</th>
+                            <td><?php echo wp_kses_post( wc_price( $order->get_total_tax(), [ 'currency' => $currency ] ) ); ?></td>
+                        </tr>
+                        <?php endif; ?>
+                        <?php if ( $order->get_shipping_total() > 0 ) : ?>
+                        <tr>
+                            <th>Shipping</th>
+                            <td><?php echo wp_kses_post( wc_price( $order->get_shipping_total(), [ 'currency' => $currency ] ) ); ?></td>
+                        </tr>
+                        <?php endif; ?>
+                        <tr class="tm-grand-total">
+                            <th>Total</th>
+                            <td><?php echo wp_kses_post( wc_price( $total, [ 'currency' => $currency ] ) ); ?></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tm-address-box">
+                <h3 class="tm-box-title">Billing address</h3>
+                <div class="tm-address">
+                    <?php
+                    if ( $billing_addr ) {
+                        echo wp_kses_post( $billing_addr );
+                    } else {
+                        echo '<p>Not provided.</p>';
+                    }
+                    ?>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Next steps -->
+        <div class="tm-next-steps">
+            <h3 class="tm-box-title">What happens next?</h3>
+            <p>
+                Our team will now review your order and start the comprehensive trademark study
+                for the selected jurisdiction(s). You will be notified by email once the report
+                is ready or if we need any additional information from you.
+            </p>
+        </div>
+    </div>
+</div>
