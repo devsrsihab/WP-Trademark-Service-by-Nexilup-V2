@@ -57,12 +57,8 @@ update_option('tm_last_country_id', $country_id);
             // -------- GET TM DATA (nested OR flattened) ----------
             if (!empty($item['tm_data'])) {
                 $tm = $item['tm_data'];
-<<<<<<< HEAD
 
                 $type        = strtolower($tm['tm_type'] ?? '');   // FIXED
-=======
-                $type        = strtolower($tm['type'] ?? '');
->>>>>>> 76c7624a8e57ec015713f48ec76e283d03bf02a5
                 $classes     = max(1, intval($tm['tm_class_count'] ?? 1));
                 $tm_class_list = $tm['tm_class_list'] ?? '[]';
                 $step_num    = max(1, intval($tm['step'] ?? ($item['tm_step'] ?? 1)));
@@ -353,13 +349,9 @@ $class_list = tm_normalize_json($tm_class_list);
             </div>
 
             <div class="tm-cart-row">
-<<<<<<< HEAD
                 <div class="tm-col tm-col-left tm-title">
                     <?php echo esc_html($type_label . " - " . $country_name); ?>
                 </div>
-=======
-                <div class="tm-col tm-col-left tm-title"><?php echo "Comprehensive Trademark Study"; ?></div>
->>>>>>> 76c7624a8e57ec015713f48ec76e283d03bf02a5
                 <div class="tm-col tm-col-mid"><?php echo esc_html($mid_text); ?></div>
 
                 <!-- FIXED PRICE DISPLAY -->

@@ -94,106 +94,11 @@ $billing_addr  = $order->get_formatted_billing_address();
         <div class="tm-item">
             <div class="tm-item-main">
 
-<<<<<<< HEAD
                 <div class="tm-item-text">
 
                     <!-- MARK TITLE -->
                     <div class="tm-item-title">
                         <?php echo esc_html( $item->get_meta( 'tm_mark_text' ) ); ?>
-=======
-                            <!-- <div class="tm-item-row">
-                                <span class="label">Type:</span>
-                                <span class="value">
-                                    <?php echo esc_html( $item->get_meta( 'tm_type' ) ); ?>
-                                </span>
-                            </div> -->
-
-                            <div class="tm-item-row">
-                                <span class="label">Mark:</span>
-                                <span class="value">
-                                    <?php echo esc_html( $item->get_meta( 'tm_mark_text' ) ); ?>
-                                </span>
-                            </div>
-
-                            <div class="tm-item-row">
-                            <span class="label">Classes:</span>
-<span class="value">
-    <?php
-
-    function tm_normalize_json($value) {
-
-        if (!is_string($value)) return [];
-
-        // 1️⃣ Remove ALL wrapping quotes repeatedly
-        while (
-            (substr($value, 0, 1) === '"' && substr($value, -1) === '"') ||
-            (substr($value, 0, 1) === "'" && substr($value, -1) === "'")
-        ) {
-            $value = substr($value, 1, -1);
-        }
-
-        // 2️⃣ Unescape backslashes
-        $value = stripcslashes($value);
-
-        // 3️⃣ First decode
-        $decoded = json_decode($value, true);
-
-        // 4️⃣ If still NULL, try decoding again
-        if ($decoded === null && (str_contains($value, '[') || str_contains($value, '{'))) {
-            $decoded = json_decode(stripcslashes($value), true);
-        }
-
-        // 5️⃣ Final cleanup
-        if ($decoded === null) {
-            $decoded = json_decode(trim($value, "\"'"), true);
-        }
-
-        return is_array($decoded) ? $decoded : [];
-    }
-
-    // NOW CALL THE FUNCTION CORRECTLY
-    $class_list = tm_normalize_json($item->get_meta( 'tm_tm_class_list' ));
-
-    echo !empty($class_list)
-        ? esc_html(implode('-', $class_list))
-        : '—';
-
-    ?>
-</span>
-
-                            </div>
-                        
-                            <div class="tm-item-row">
-                                <span class="label">Goods / Services:</span>
-                                <span class="value">
-                                    <?php echo esc_html( $item->get_meta( 'tm_tm_goods' ) ); ?>
-                                </span>
-                            </div>
-
-                            <div class="tm-item-row">
-                                <span class="label">Country:</span>
-                                <span class="value">
-                                    <?php echo esc_html( $item->get_meta( 'tm_country_iso' ) ); ?>
-                                </span>
-                            </div>
-
-                            <div class="tm-item-row">
-                                <span class="label">Line total:</span>
-                                <span class="value">
-                                    <?php echo wp_kses_post( $order->get_formatted_line_subtotal( $item ) ); ?>
-                                </span>
-                            </div>
-                        </div>
-
-                        <?php if ( $item->get_meta( 'tm_logo_url' ) ) : ?>
-                            <div class="tm-item-logo">
-                                <img
-                                    src="<?php echo esc_url( $item->get_meta( 'tm_logo_url' ) ); ?>"
-                                    alt="Trademark logo"
-                                />
-                            </div>
-                        <?php endif; ?>
->>>>>>> 76c7624a8e57ec015713f48ec76e283d03bf02a5
                     </div>
 
                     <!-- TYPE -->
@@ -212,62 +117,9 @@ $billing_addr  = $order->get_formatted_billing_address();
                         </span>
                     </div>
 
-                    <!-- CLASSES -->
-                    <div class="tm-item-row">
-                        <span class="label">Classes:</span>
-                        <span class="value">
+         
 
-                            <?php
-                            // Safe JSON normalize
-                            if (!function_exists('tm_normalize_json')) {
-                                function tm_normalize_json($value) {
-                                    if (!is_string($value)) return [];
-
-                                    while (
-                                        (substr($value, 0, 1) === '"' && substr($value, -1) === '"') ||
-                                        (substr($value, 0, 1) === "'" && substr($value, -1) === "'")
-                                    ) {
-                                        $value = substr($value, 1, -1);
-                                    }
-
-                                    $value = stripcslashes($value);
-                                    $decoded = json_decode($value, true);
-
-                                    if ($decoded === null && (str_contains($value, '[') || str_contains($value, '{'))) {
-                                        $decoded = json_decode(stripcslashes($value), true);
-                                    }
-
-                                    if ($decoded === null) {
-                                        $decoded = json_decode(trim($value, "\"'"), true);
-                                    }
-
-                                    return is_array($decoded) ? $decoded : [];
-                                }
-                            }
-
-                            // Get raw values
-                            $raw_list     = $item->get_meta('tm_tm_class_list');
-                            $class_count  = intval($item->get_meta('tm_tm_class_count'));
-                            $class_list   = tm_normalize_json($raw_list);
-
-                            // FINAL LOGIC: If empty → fallback to class_count
-                            if (!empty($class_list)) {
-                                echo esc_html(implode('-', $class_list));
-                            } else {
-                                echo esc_html($class_count . ' class' . ($class_count > 1 ? 'es' : ''));
-                            }
-                            ?>
-                        </span>
-                    </div>
-
-                    <!-- GOODS -->
-                    <div class="tm-item-row">
-                        <span class="label">Goods / Services:</span>
-                        <span class="value">
-                            <?php echo esc_html( $item->get_meta( 'tm_tm_goods' ) ); ?>
-                        </span>
-                    </div>
-
+   
                     <!-- COUNTRY -->
                     <div class="tm-item-row">
                         <span class="label">Country:</span>
