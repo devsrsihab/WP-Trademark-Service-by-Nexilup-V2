@@ -28,4 +28,23 @@ jQuery(document).ready(function ($) {
       menuContent.css("padding-top", "25px");
     }
   });
+
+  /* ---------------------------------------------------------
+       PASSWORD VISIBILITY TOGGLE (Vanilla JS)
+    --------------------------------------------------------- */
+  const toggles = document.querySelectorAll(".tm-password-toggle");
+
+  toggles.forEach((toggle) => {
+    toggle.addEventListener("click", function () {
+      const input = this.previousElementSibling;
+
+      if (input.type === "password") {
+        input.type = "text";
+        this.textContent = "🙈"; // hide icon
+      } else {
+        input.type = "password";
+        this.textContent = "👁️"; // show icon
+      }
+    });
+  });
 });

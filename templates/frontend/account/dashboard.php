@@ -7,7 +7,7 @@ $table = $wpdb->prefix . "tm_trademarks";
 
 // Count user trademarks
 $active_count = $wpdb->get_var($wpdb->prepare(
-    "SELECT COUNT(*) FROM $table WHERE user_id = %d AND status IN ('processing','paid','in_process')",
+    "SELECT COUNT(*) FROM $table WHERE user_id = %d ",
     $user_id
 ));
 
@@ -18,7 +18,7 @@ $created = date('m/d/Y', strtotime($user->user_registered));
 <div class="tm-dashboard-boxes">
     <div class="item">
         <strong><?php echo $active_count; ?></strong>
-        <span>Total Active</span>
+        <span>Total TM</span>
     </div>
     <div class="item">
         <strong><?php echo esc_html($user->display_name); ?></strong>

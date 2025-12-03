@@ -12,8 +12,8 @@
   --tm-text-light: #64748b;
   --tm-heading: #1e293b;
 
-  --tm-primary: #2563eb;
-  --tm-primary-dark: #1e4dc9;
+  --tm-primary: #2d338c;
+  --tm-primary-dark: #222766;
 
   --tm-success: #166534;
   --tm-success-bg: #dcfce7;
@@ -231,7 +231,7 @@
   padding: 30px;
   border-radius: var(--tm-radius);
   box-shadow: var(--tm-shadow);
-  max-width: 700px;
+  max-width: 100%;
 }
 
 .tm-settings-form label {
@@ -623,6 +623,75 @@
 }
 
 /************************************************************
+=================== SETTING DESIGN =======================
+*************************************************************/
+.tm-section-title {
+  font-size: 22px !important;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 20px;
+}
+
+.tm-settings-form-wrapper {
+  margin-bottom: 25px;
+}
+
+.tm-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.tm-form-grid input {
+  background: #f8fafc;
+}
+
+.tm-alert-success {
+  background: #dcfce7;
+  color: #166534;
+  padding: 12px 18px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  border: 1px solid #bbf7d0;
+}
+
+.tm-alert-error {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 12px 18px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  border: 1px solid #fecaca;
+}
+.tm-password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tm-password-input {
+  width: 100%;
+  padding-right: 45px !important;
+}
+
+.tm-password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #64748b;
+  user-select: none;
+}
+
+.tm-password-toggle:hover {
+  color: #2563eb;
+}
+
+/************************************************************
 =================== RESPONSIVE DESIGN =======================
 *************************************************************/
 
@@ -636,7 +705,9 @@
   .tm-trademark-body {
     grid-template-columns: 1fr;
   }
-
+  .tm-form-grid {
+    grid-template-columns: 1fr;
+  }
   .tm-account-wrapper {
     flex-direction: column;
   }

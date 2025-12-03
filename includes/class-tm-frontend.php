@@ -28,6 +28,7 @@ class TM_Frontend {
         }
         add_shortcode('tm_account', [__CLASS__, 'shortcode_account_dashboard']);
 
+        add_action('init', [__CLASS__, 'handle_profile_update']);
 
     }
 
@@ -179,57 +180,57 @@ class TM_Frontend {
 
 
 
-public static function tm_get_country_price_step1() {
+    public static function tm_get_country_price_step1() {
 
-    $country_id = intval($_POST['country_id']);
-    $type = sanitize_text_field($_POST['type']);
+        $country_id = intval($_POST['country_id']);
+        $type = sanitize_text_field($_POST['type']);
 
-    $row = TM_Country_Prices::get_step1_price_row($country_id);
+        $row = TM_Country_Prices::get_step1_price_row($country_id);
 
-    if (!$row) {
-        wp_send_json_error(['message' => 'No price row found']);
+        if (!$row) {
+            wp_send_json_error(['message' => 'No price row found']);
+        }
+
+        wp_send_json_success([
+            'first' => floatval($row->first_class_fee),
+            'add'   => floatval($row->additional_class_fee),
+            'currency' => $row->currency ?: 'USD'
+        ]);
     }
 
-    wp_send_json_success([
-        'first' => floatval($row->first_class_fee),
-        'add'   => floatval($row->additional_class_fee),
-        'currency' => $row->currency ?: 'USD'
-    ]);
-}
 
 
 
+    public static function tm_get_country_price() {
 
-public static function tm_get_country_price() {
+        if (!isset($_POST['country_id']) || !isset($_POST['type'])) {
+            wp_send_json_error(['message' => 'Missing data']);
+        }
 
-    if (!isset($_POST['country_id']) || !isset($_POST['type'])) {
-        wp_send_json_error(['message' => 'Missing data']);
+        global $wpdb;
+        $country_id = intval($_POST['country_id']);
+        $type       = sanitize_text_field($_POST['type']);
+
+        // Always fallback to word
+        if ($type !== 'word') {
+            $type = 'word';
+        }
+
+        // Get price row
+        $price_row = TM_Country_Prices::get_priority_price_row($country_id, $type);
+
+        if (!$price_row) {
+            wp_send_json_error(['message' => 'No price row']);
+        }
+
+        $first = floatval($price_row->first_class_fee);
+        $add   = floatval($price_row->additional_class_fee);
+
+        wp_send_json_success([
+            'step1_one' => $first,
+            'step1_add' => $add
+        ]);
     }
-
-    global $wpdb;
-    $country_id = intval($_POST['country_id']);
-    $type       = sanitize_text_field($_POST['type']);
-
-    // Always fallback to word
-    if ($type !== 'word') {
-        $type = 'word';
-    }
-
-    // Get price row
-    $price_row = TM_Country_Prices::get_priority_price_row($country_id, $type);
-
-    if (!$price_row) {
-        wp_send_json_error(['message' => 'No price row']);
-    }
-
-    $first = floatval($price_row->first_class_fee);
-    $add   = floatval($price_row->additional_class_fee);
-
-    wp_send_json_success([
-        'step1_one' => $first,
-        'step1_add' => $add
-    ]);
-}
 
 
 
@@ -416,6 +417,100 @@ public static function tm_get_country_price() {
 
         return ob_get_clean();
     }
+
+    public static function handle_profile_update() {
+
+        // ================================
+        // SAFE REDIRECT URL
+        // ================================
+        $redirect_url = wp_get_referer() ? wp_get_referer() : site_url('/tm-account/?section=settings');
+
+        // =====================================================
+        // 1. UPDATE PROFILE INFORMATION
+        // =====================================================
+        if (isset($_POST['tm_update_profile'])) {
+
+            if (!isset($_POST['tm_profile_nonce']) ||
+                !wp_verify_nonce($_POST['tm_profile_nonce'], 'tm_update_profile')) {
+
+                wp_redirect(add_query_arg('tm_error', 'invalid_nonce', $redirect_url));
+                exit;
+            }
+
+            $user_id = get_current_user_id();
+
+            wp_update_user([
+                'ID'           => $user_id,
+                'display_name' => sanitize_text_field($_POST['full_name']),
+            ]);
+
+            update_user_meta($user_id, 'company', sanitize_text_field($_POST['company']));
+            update_user_meta($user_id, 'phone', sanitize_text_field($_POST['phone']));
+            update_user_meta($user_id, 'address', sanitize_text_field($_POST['address']));
+            update_user_meta($user_id, 'city', sanitize_text_field($_POST['city']));
+            update_user_meta($user_id, 'state', sanitize_text_field($_POST['state']));
+            update_user_meta($user_id, 'zip', sanitize_text_field($_POST['zip']));
+            update_user_meta($user_id, 'country', sanitize_text_field($_POST['country']));
+
+            wp_redirect(add_query_arg('tm_updated', 'profile', $redirect_url));
+            exit;
+        }
+
+
+
+        // =====================================================
+        // 2. UPDATE PASSWORD
+        // =====================================================
+        if (isset($_POST['tm_update_password'])) {
+
+            // Validate nonce
+            if (!isset($_POST['tm_password_nonce']) ||
+                !wp_verify_nonce($_POST['tm_password_nonce'], 'tm_update_password')) {
+
+                wp_redirect(add_query_arg('tm_error', 'invalid_nonce', $redirect_url));
+                exit;
+            }
+
+            $user = wp_get_current_user();
+
+            $current = sanitize_text_field($_POST['current_password']);
+            $new     = sanitize_text_field($_POST['new_password']);
+            $confirm = sanitize_text_field($_POST['confirm_password']);
+
+            // Validate Current Password
+            if (!wp_check_password($current, $user->user_pass, $user->ID)) {
+                wp_redirect(add_query_arg('tm_error', 'wrong_password', $redirect_url));
+                exit;
+            }
+
+            // Validate Matching Passwords
+            if ($new !== $confirm) {
+                wp_redirect(add_query_arg('tm_error', 'password_mismatch', $redirect_url));
+                exit;
+            }
+
+            // =====================================================
+            // UPDATE PASSWORD WITHOUT LOGGING OUT
+            // =====================================================
+
+            wp_set_password($new, $user->ID);
+
+            // Auto-login user again (prevents logout)
+            wp_set_current_user($user->ID);
+            wp_set_auth_cookie($user->ID, true, false);
+
+            // Fire login hook (important for WooCommerce + sessions)
+            do_action('wp_login', $user->user_login, $user);
+
+            // Redirect with success
+            wp_redirect(add_query_arg('tm_updated', 'password', $redirect_url));
+            exit;
+        }
+
+    }
+
+
+
 
 
 

@@ -452,3 +452,5 @@ if (isset($data['tm_class_details'])) {
     // Close the container
     echo '</div>';
 }
+
+
