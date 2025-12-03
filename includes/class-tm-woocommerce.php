@@ -582,56 +582,56 @@ class TM_WooCommerce {
         ]);
     }
 
-public static function create_trademarks_on_status($order_id)
-{
-    error_log("TM DEBUG: create_trademarks_on_status fired for order $order_id");
+    public static function create_trademarks_on_status($order_id)
+    {
+        error_log("TM DEBUG: create_trademarks_on_status fired for order $order_id");
 
-    $order = wc_get_order($order_id);
-    if (!$order) {
-        error_log("TM DEBUG: FAILED loading order $order_id");
-        return;
+        $order = wc_get_order($order_id);
+        if (!$order) {
+            error_log("TM DEBUG: FAILED loading order $order_id");
+            return;
+        }
+
+        foreach ($order->get_items() as $item_id => $item) {
+
+            // Skip if already created
+            if ($item->get_meta('tm_trademark_id')) {
+                continue;
+            }
+
+            $tm_raw = $item->get_meta('tm_raw_step_data');
+            if (!$tm_raw) {
+                error_log("TM DEBUG: No tm_raw_step_data found for item $item_id");
+                continue;
+            }
+
+            $tm = [
+                'raw_step_data' => json_decode($tm_raw, true),
+                'step'          => $item->get_meta('tm_step'),
+                'owner'         => json_decode($item->get_meta('tm_owner'), true),
+                'currency'      => $item->get_meta('tm_currency'),
+            ];
+
+            error_log("TM DEBUG: Creating trademark with data: " . print_r($tm, true));
+
+            // ⭐ FIXED: Correct argument order ⭐
+            $tm_id = TM_Trademarks::create_from_order(
+                $order_id,   // first argument MUST be order_id (int)
+                $item,       // second is order item object
+                $tm          // third is trademark data
+            );
+
+            if (!$tm_id) {
+                error_log("TM ERROR: Trademark insert FAILED for order item $item_id");
+                continue;
+            }
+
+            $item->add_meta_data('tm_trademark_id', $tm_id, true);
+            $item->save_meta_data();
+
+            error_log("TM DEBUG: Trademark created with ID $tm_id for item $item_id");
+        }
     }
-
-    foreach ($order->get_items() as $item_id => $item) {
-
-        // Skip if already created
-        if ($item->get_meta('tm_trademark_id')) {
-            continue;
-        }
-
-        $tm_raw = $item->get_meta('tm_raw_step_data');
-        if (!$tm_raw) {
-            error_log("TM DEBUG: No tm_raw_step_data found for item $item_id");
-            continue;
-        }
-
-        $tm = [
-            'raw_step_data' => json_decode($tm_raw, true),
-            'step'          => $item->get_meta('tm_step'),
-            'owner'         => json_decode($item->get_meta('tm_owner'), true),
-            'currency'      => $item->get_meta('tm_currency'),
-        ];
-
-        error_log("TM DEBUG: Creating trademark with data: " . print_r($tm, true));
-
-        // ⭐ FIXED: Correct argument order ⭐
-        $tm_id = TM_Trademarks::create_from_order(
-            $order_id,   // first argument MUST be order_id (int)
-            $item,       // second is order item object
-            $tm          // third is trademark data
-        );
-
-        if (!$tm_id) {
-            error_log("TM ERROR: Trademark insert FAILED for order item $item_id");
-            continue;
-        }
-
-        $item->add_meta_data('tm_trademark_id', $tm_id, true);
-        $item->save_meta_data();
-
-        error_log("TM DEBUG: Trademark created with ID $tm_id for item $item_id");
-    }
-}
 
 
 

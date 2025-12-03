@@ -177,64 +177,64 @@ class TM_Trademarks {
         return $wpdb->insert_id;
     }
 
-        public static function update_trademark_page_submit() {
+    public static function update_trademark_page_submit() {
 
-            // Verify nonce
-            if (!isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'], 'tm_admin_trademark_nonce')) {
-                wp_die('Security check failed');
-            }
-
-            $id = intval($_POST['trademark_id']);
-
-            // Basic update fields
-            $update_data = [
-                'trademark_type'  => sanitize_text_field($_POST['trademark_type']),
-                'mark_text'       => sanitize_text_field($_POST['mark_text']),
-                'class_count'     => intval($_POST['class_count']),
-                'priority_claim'  => intval($_POST['priority_claim']),
-                'poa_type'        => sanitize_text_field($_POST['poa_type']),
-                'final_price'     => floatval($_POST['final_price']),
-                'status'          => sanitize_text_field($_POST['status']),
-            ];
-
-            // Goods/services textarea (only exists if class_details is EMPTY)
-            if (isset($_POST['goods_services'])) {
-                $update_data['goods_services'] = sanitize_textarea_field($_POST['goods_services']);
-            }
-
-            // CLASS LIST — convert CSV to array
-            if (!empty($_POST['class_list'])) {
-                $list = array_map('trim', explode(',', $_POST['class_list']));
-                $update_data['class_list'] = $list;
-            } else {
-                $update_data['class_list'] = [];
-            }
-
-            // CLASS DETAILS — multi-row structure
-            if (!empty($_POST['class_details']) && is_array($_POST['class_details'])) {
-                $clean_details = [];
-
-                foreach ($_POST['class_details'] as $index => $row) {
-                    if (empty($row['class']) && empty($row['goods'])) continue;
-
-                    $clean_details[$index] = [
-                        'class' => sanitize_text_field($row['class']),
-                        'goods' => sanitize_textarea_field($row['goods']),
-                    ];
-                }
-
-                $update_data['class_details'] = $clean_details;
-            } else {
-                $update_data['class_details'] = [];
-            }
-
-            // Update trademark in DB
-            TM_Trademarks::update($id, $update_data);
-
-            // Redirect to view page
-            wp_redirect(admin_url("admin.php?page=tm-trademarks&action=view&id=$id"));
-            exit;
+        // Verify nonce
+        if (!isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'], 'tm_admin_trademark_nonce')) {
+            wp_die('Security check failed');
         }
+
+        $id = intval($_POST['trademark_id']);
+
+        // Basic update fields
+        $update_data = [
+            'trademark_type'  => sanitize_text_field($_POST['trademark_type']),
+            'mark_text'       => sanitize_text_field($_POST['mark_text']),
+            'class_count'     => intval($_POST['class_count']),
+            'priority_claim'  => intval($_POST['priority_claim']),
+            'poa_type'        => sanitize_text_field($_POST['poa_type']),
+            'final_price'     => floatval($_POST['final_price']),
+            'status'          => sanitize_text_field($_POST['status']),
+        ];
+
+        // Goods/services textarea (only exists if class_details is EMPTY)
+        if (isset($_POST['goods_services'])) {
+            $update_data['goods_services'] = sanitize_textarea_field($_POST['goods_services']);
+        }
+
+        // CLASS LIST — convert CSV to array
+        if (!empty($_POST['class_list'])) {
+            $list = array_map('trim', explode(',', $_POST['class_list']));
+            $update_data['class_list'] = $list;
+        } else {
+            $update_data['class_list'] = [];
+        }
+
+        // CLASS DETAILS — multi-row structure
+        if (!empty($_POST['class_details']) && is_array($_POST['class_details'])) {
+            $clean_details = [];
+
+            foreach ($_POST['class_details'] as $index => $row) {
+                if (empty($row['class']) && empty($row['goods'])) continue;
+
+                $clean_details[$index] = [
+                    'class' => sanitize_text_field($row['class']),
+                    'goods' => sanitize_textarea_field($row['goods']),
+                ];
+            }
+
+            $update_data['class_details'] = $clean_details;
+        } else {
+            $update_data['class_details'] = [];
+        }
+
+        // Update trademark in DB
+        TM_Trademarks::update($id, $update_data);
+
+        // Redirect to view page
+        wp_redirect(admin_url("admin.php?page=tm-trademarks&action=view&id=$id"));
+        exit;
+    }
 
 
 
