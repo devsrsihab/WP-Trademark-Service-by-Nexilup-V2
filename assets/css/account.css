@@ -8,6 +8,7 @@
   align-items: flex-start;
   gap: 25px;
   width: 100%;
+  padding: 25px 0;
 }
 
 /* SIDEBAR INSIDE CONTAINER — NOT FIXED */
