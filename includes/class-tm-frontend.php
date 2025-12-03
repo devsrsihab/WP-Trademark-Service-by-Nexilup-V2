@@ -22,113 +22,16 @@ class TM_Frontend {
         add_action('wp_ajax_tm_get_country_price_step1', [TM_Frontend::class, 'tm_get_country_price_step1']);
         add_action('wp_ajax_nopriv_tm_get_country_price_step1', [TM_Frontend::class, 'tm_get_country_price_step1']);
 
-
-    }
-
-//     function tm_get_country_price() {
-//     if (!isset($_POST['country_id']) || !isset($_POST['type'])) {
-//         wp_send_json_error(['message' => 'Missing data']);
-//     }
-
-//     global $wpdb;
-//     $country_id = intval($_POST['country_id']);
-//     $type       = sanitize_text_field($_POST['type']);
-
-//     // Get the correct price row using your priority rules
-//     $price_row = TM_Country_Prices::get_priority_price_row($country_id, $type);
-
-//     if (!$price_row) {
-//         wp_send_json_error(['message' => 'No price row']);
-//     }
-
-//     $first = floatval($price_row->first_class_fee);
-//     $add   = floatval($price_row->additional_class_fee);
-
-//     wp_send_json_success([
-//         'step1_one' => $first,
-//         'step1_add' => $add
-//     ]);
-// }
-
-public static function tm_get_country_price_step1() {
-
-    $country_id = intval($_POST['country_id']);
-    $type = sanitize_text_field($_POST['type']);
-
-    $row = TM_Country_Prices::get_step1_price_row($country_id);
-
-    if (!$row) {
-        wp_send_json_error(['message' => 'No price row found']);
-    }
-
-    wp_send_json_success([
-        'first' => floatval($row->first_class_fee),
-        'add'   => floatval($row->additional_class_fee),
-        'currency' => $row->currency ?: 'USD'
-    ]);
-}
-
-
-
-
-public static function tm_get_country_price() {
-
-    if (!isset($_POST['country_id']) || !isset($_POST['type'])) {
-        wp_send_json_error(['message' => 'Missing data']);
-    }
-
-    global $wpdb;
-    $country_id = intval($_POST['country_id']);
-    $type       = sanitize_text_field($_POST['type']);
-
-    // Always fallback to word
-    if ($type !== 'word') {
-        $type = 'word';
-    }
-
-    // Get price row
-    $price_row = TM_Country_Prices::get_priority_price_row($country_id, $type);
-
-    if (!$price_row) {
-        wp_send_json_error(['message' => 'No price row']);
-    }
-
-    $first = floatval($price_row->first_class_fee);
-    $add   = floatval($price_row->additional_class_fee);
-
-    wp_send_json_success([
-        'step1_one' => $first,
-        'step1_add' => $add
-    ]);
-}
-
-
-
-
-    function tm_load_service_conditions() {
-        check_ajax_referer('tm_nonce', 'nonce');
-
-        global $wpdb;
-        $table = TM_Database::table_name('service_conditions');
-        $country_id = intval($_POST['country_id']);
-
-        $rows = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $table WHERE country_id = %d ORDER BY step_number ASC", $country_id)
-        );
-
-        ob_start();
-        if ($rows) {
-            foreach ($rows as $sc) {
-                echo "<h3>Step {$sc->step_number}</h3>";
-                echo "<div class='sc-block'>" . wp_kses_post($sc->content) . "</div>";
-            }
-        } else {
-            echo "<p>No service conditions available.</p>";
+        // user dashboard
+        if (!defined('TM_ACCOUNT_PATH')) {
+            define('TM_ACCOUNT_PATH', WP_TMS_NEXILUP_PLUGIN_PATH . 'templates/frontend/account/');
         }
+        add_shortcode('tm_account', [__CLASS__, 'shortcode_account_dashboard']);
 
-        wp_send_json_success(['html' => ob_get_clean()]);
+
     }
 
+    // register script
     public static function register_scripts() {
 
         wp_enqueue_script('tm-country-filter-js');
@@ -240,7 +143,122 @@ public static function tm_get_country_price() {
             WP_TMS_NEXILUP_VERSION,
             true
         );
+
+        wp_register_style(
+            'tm-account-css',
+            WP_TMS_NEXILUP_URL . 'assets/css/account.css',
+            [],
+            WP_TMS_NEXILUP_VERSION
+        );
+
+        wp_register_script(
+            'tm-account-js',
+            WP_TMS_NEXILUP_URL . 'assets/js/account.js',
+            ['jquery'],
+            WP_TMS_NEXILUP_VERSION,
+            true
+        );
+
     }
+
+
+    public static function shortcode_account_dashboard() {
+
+        if (!is_user_logged_in()) {
+            return "<p class='tm-error'>You must log in to access your trademark dashboard.</p>";
+        }
+
+        wp_enqueue_style('tm-account-css');
+        wp_enqueue_script('tm-account-js');
+
+        // Load template output
+        ob_start();
+        include WP_TMS_NEXILUP_PLUGIN_PATH . 'templates/frontend/account/dashboard-router.php';
+        return ob_get_clean();
+    }
+
+
+
+public static function tm_get_country_price_step1() {
+
+    $country_id = intval($_POST['country_id']);
+    $type = sanitize_text_field($_POST['type']);
+
+    $row = TM_Country_Prices::get_step1_price_row($country_id);
+
+    if (!$row) {
+        wp_send_json_error(['message' => 'No price row found']);
+    }
+
+    wp_send_json_success([
+        'first' => floatval($row->first_class_fee),
+        'add'   => floatval($row->additional_class_fee),
+        'currency' => $row->currency ?: 'USD'
+    ]);
+}
+
+
+
+
+public static function tm_get_country_price() {
+
+    if (!isset($_POST['country_id']) || !isset($_POST['type'])) {
+        wp_send_json_error(['message' => 'Missing data']);
+    }
+
+    global $wpdb;
+    $country_id = intval($_POST['country_id']);
+    $type       = sanitize_text_field($_POST['type']);
+
+    // Always fallback to word
+    if ($type !== 'word') {
+        $type = 'word';
+    }
+
+    // Get price row
+    $price_row = TM_Country_Prices::get_priority_price_row($country_id, $type);
+
+    if (!$price_row) {
+        wp_send_json_error(['message' => 'No price row']);
+    }
+
+    $first = floatval($price_row->first_class_fee);
+    $add   = floatval($price_row->additional_class_fee);
+
+    wp_send_json_success([
+        'step1_one' => $first,
+        'step1_add' => $add
+    ]);
+}
+
+
+
+
+    function tm_load_service_conditions() {
+        check_ajax_referer('tm_nonce', 'nonce');
+
+        global $wpdb;
+        $table = TM_Database::table_name('service_conditions');
+        $country_id = intval($_POST['country_id']);
+
+        $rows = $wpdb->get_results(
+            $wpdb->prepare("SELECT * FROM $table WHERE country_id = %d ORDER BY step_number ASC", $country_id)
+        );
+
+        ob_start();
+        if ($rows) {
+            foreach ($rows as $sc) {
+                echo "<h3>Step {$sc->step_number}</h3>";
+                echo "<div class='sc-block'>" . wp_kses_post($sc->content) . "</div>";
+            }
+        } else {
+            echo "<p>No service conditions available.</p>";
+        }
+
+        wp_send_json_success(['html' => ob_get_clean()]);
+    }
+
+ 
 
     public static function shortcode_country_table($atts) {
         $atts = shortcode_atts([

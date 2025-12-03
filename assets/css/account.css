@@ -1,0 +1,347 @@
+/************************************************************
+=================== GLOBAL LAYOUT ===========================
+*************************************************************/
+
+/* WRAPPER MUST USE FLEX INSIDE THE THEME CONTAINER */
+.tm-account-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+  width: 100%;
+}
+
+/* SIDEBAR INSIDE CONTAINER — NOT FIXED */
+.tm-account-sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  background: var(--e-global-color-white, #ffffff);
+  border: 1px solid var(--e-global-color-border, #e2e8f0);
+  border-radius: 10px;
+  padding: 20px 15px;
+}
+
+/* MAIN AREA TAKES AVAILABLE SPACE */
+.tm-account-content {
+  flex: 1;
+  background: var(--e-global-color-background, #f8fafc);
+  padding: 25px;
+  border-radius: 10px;
+}
+
+/************************************************************
+=================== SIDEBAR MENU ============================
+*************************************************************/
+
+.tm-account-sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tm-account-sidebar ul li {
+  margin-bottom: 12px;
+}
+
+.tm-account-sidebar ul li a {
+  display: block;
+  padding: 14px 18px;
+  background: var(--e-global-color-tertiary, #f1f5f9);
+  color: var(--e-global-color-text, #334155);
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.tm-account-sidebar ul li a:hover {
+  background: var(--e-global-color-4f59d67, #e2e8f0);
+  color: white;
+}
+
+.tm-account-sidebar ul li a.active {
+  background: var(--e-global-color-4f59d67, #2563eb);
+  color: var(--e-global-color-white, #ffffff);
+}
+
+/************************************************************
+=================== DASHBOARD BOXES =========================
+*************************************************************/
+
+.tm-dashboard-boxes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 25px;
+  margin-top: 10px;
+}
+
+.tm-dashboard-boxes .item {
+  background: var(--e-global-color-white, #ffffff);
+  padding: 25px;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tm-dashboard-boxes .item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+.tm-dashboard-boxes .item strong {
+  font-size: 28px;
+  color: var(--e-global-color-heading, #1e293b);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.tm-dashboard-boxes .item span {
+  font-size: 14px;
+  color: var(--e-global-color-4f59d67-text, #64748b);
+}
+
+/************************************************************
+=================== USER INFORMATION ========================
+*************************************************************/
+
+.tm-user-info-table {
+  width: 100%;
+  background: var(--e-global-color-white, #ffffff);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.tm-user-info-table h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: var(--e-global-color-heading, #1e293b);
+}
+
+.tm-user-info-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tm-user-info-table table td {
+  padding: 10px 0;
+  vertical-align: top;
+  color: var(--e-global-color-text, #334155);
+}
+
+.tm-user-info-table table td:first-child {
+  width: 200px;
+  font-weight: 600;
+  color: var(--e-global-color-4f59d67-text, #475569);
+}
+
+/************************************************************
+=================== ACTIVE TRADEMARK LIST ===================
+*************************************************************/
+
+.tm-active-list {
+  background: var(--e-global-color-white, #ffffff);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.tm-active-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tm-active-list table th,
+.tm-active-list table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--e-global-color-border, #e2e8f0);
+  text-align: left;
+}
+
+.tm-active-list table th {
+  font-weight: 700;
+  color: var(--e-global-color-heading, #1e293b);
+}
+
+.tm-status-badge {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tm-status-processing {
+  background: var(--e-global-color-accent-bg, #dbeafe);
+  color: var(--e-global-color-accent, #1e40af);
+}
+.tm-status-paid {
+  background: var(--e-global-color-success-bg, #dcfce7);
+  color: var(--e-global-color-success, #166534);
+}
+.tm-status-in_process {
+  background: var(--e-global-color-warning-bg, #fef9c3);
+  color: var(--e-global-color-warning, #854d0e);
+}
+
+/************************************************************
+=================== SETTINGS FORM ===========================
+*************************************************************/
+
+.tm-settings-form {
+  background: var(--e-global-color-white, #ffffff);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  max-width: 700px;
+}
+
+.tm-settings-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--e-global-color-4f59d67-text, #475569);
+}
+
+.tm-settings-form input[type="text"],
+.tm-settings-form input[type="tel"],
+.tm-settings-form input[type="password"],
+.tm-settings-form textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--e-global-color-border, #cbd5e1);
+  font-size: 15px;
+  margin-bottom: 15px;
+}
+
+.tm-settings-form input:focus,
+.tm-settings-form textarea:focus {
+  outline: none;
+  border-color: var(--e-global-color-4f59d67, #2563eb);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.tm-btn-primary {
+  background: var(--e-global-color-4f59d67, #2563eb);
+  color: var(--e-global-color-white, #ffffff);
+  padding: 12px 25px;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  transition: all 0.25s ease;
+}
+
+.tm-btn-primary:hover {
+  background: var(--e-global-color-4f59d67-dark, #1e4fd1);
+}
+
+/*********************************************
+    MOBILE HAMBURGER BUTTON
+*********************************************/
+.tm-hamburger-btn {
+  display: none; /* hide on desktop */
+  background: var(--e-global-color-4f59d67, #2563eb);
+  padding: 10px 20px 10px 20px !important;
+  border-radius: 3px !important;
+  cursor: pointer;
+  border: none;
+  color: var(--e-global-color-white, #fff);
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  z-index: 999;
+}
+
+.tm-hamburger-btn:hover {
+  background: var(--e-global-color-4f59d67-dark, #1e4dc9);
+}
+
+.tm-hamburger-icon {
+  width: 22px;
+  height: 22px;
+  stroke: var(--e-global-color-white, #fff);
+}
+
+/*********************************************
+    MOBILE DROPDOWN MENU
+*********************************************/
+.tm-mobile-menu {
+  display: none;
+  background: var(--e-global-color-white, #fff);
+  border: 1px solid var(--e-global-color-border, #e2e8f0);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.tm-mobile-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tm-mobile-menu ul li a {
+  display: block;
+  padding: 12px 15px;
+  background: var(--e-global-color-background, #f8fafc);
+  color: var(--e-global-color-text, #334155);
+  margin-bottom: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.tm-mobile-menu ul li a.active {
+  background: var(--e-global-color-4f59d67, #2563eb);
+  color: var(--e-global-color-white, #fff);
+}
+/*********************************************
+    DESKTOP SIDEBAR SHOWN NORMALLY
+*********************************************/
+.desktop-only {
+  display: block;
+}
+
+/************************************************************
+=================== RESPONSIVE DESIGN =======================
+*************************************************************/
+
+@media (max-width: 1024px) {
+  .tm-dashboard-boxes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .tm-account-wrapper {
+    flex-direction: column;
+  }
+
+  .tm-account-sidebar {
+    width: 100%;
+  }
+  .desktop-only {
+    display: none;
+  }
+  .tm-hamburger-btn {
+    display: flex;
+  }
+  .tm-mobile-menu {
+    width: 100%;
+    margin-top: 66px;
+    margin-bottom: 0;
+  }
+  .tm-account-content {
+    padding: 35px 20px;
+    margin-top: 52px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .tm-dashboard-boxes .item strong {
+    font-size: 22px;
+  }
+}
