@@ -259,93 +259,46 @@ update_option('tm_last_country_id', $country_id);
                     <div class="tm-header-title"><?php echo esc_html($tm_title); ?></div>
                 </div>
                 <div class="tm-header-classes">
-<?php
-if (!function_exists('tm_normalize_json')) {
-    function tm_normalize_json($value) {
-        if (!is_string($value)) return [];
+                    <?php
+                    if (!function_exists('tm_normalize_json')) {
+                        function tm_normalize_json($value) {
+                            if (!is_string($value)) return [];
 
-        while (
-            (substr($value, 0, 1) === '"' && substr($value, -1) === '"') ||
-            (substr($value, 0, 1) === "'" && substr($value, -1) === "'")
-        ) {
-            $value = substr($value, 1, -1);
-        }
+                            while (
+                                (substr($value, 0, 1) === '"' && substr($value, -1) === '"') ||
+                                (substr($value, 0, 1) === "'" && substr($value, -1) === "'")
+                            ) {
+                                $value = substr($value, 1, -1);
+                            }
 
-        $value = stripcslashes($value);
-        $decoded = json_decode($value, true);
+                            $value = stripcslashes($value);
+                            $decoded = json_decode($value, true);
 
-        if ($decoded === null && (str_contains($value, '[') || str_contains($value, '{'))) {
-            $decoded = json_decode(stripcslashes($value), true);
-        }
+                            if ($decoded === null && (str_contains($value, '[') || str_contains($value, '{'))) {
+                                $decoded = json_decode(stripcslashes($value), true);
+                            }
 
-        if ($decoded === null) {
-            $value2 = trim($value, "\"'");
-            $decoded = json_decode($value2, true);
-        }
+                            if ($decoded === null) {
+                                $value2 = trim($value, "\"'");
+                                $decoded = json_decode($value2, true);
+                            }
 
-        return is_array($decoded) ? $decoded : [];
-    }
-}
+                            return is_array($decoded) ? $decoded : [];
+                        }
+                    }
 
-$class_list = tm_normalize_json($tm_class_list);
-?>
+                    $class_list = tm_normalize_json($tm_class_list);
+                    ?>
 
-<?php if (!empty($class_list)) : ?>
-    <span>
-        Class(es) <?php echo esc_html(implode('-', $class_list)); ?>
-    </span>
-<?php endif; ?>
+                    <?php if (!empty($class_list)) : ?>
+                        <span>
+                            Class(es) <?php echo esc_html(implode('-', $class_list)); ?>
+                        </span>
+                    <?php endif; ?>
 
 
                 </div>
-                <div class="tm-header-classes">
-              <span>
-                  <?php
 
-          if (!function_exists('tm_normalize_json')) {
-            echo "Class(es):";
-              function tm_normalize_json($value) {
-
-                  if (!is_string($value)) return [];
-
-                  // 1️⃣ Remove ALL wrapping quotes repeatedly
-                  while (
-                      (substr($value, 0, 1) === '"' && substr($value, -1) === '"') ||
-                      (substr($value, 0, 1) === "'" && substr($value, -1) === "'")
-                  ) {
-                      $value = substr($value, 1, -1);
-                  }
-
-                  // 2️⃣ Unescape any slashes
-                  $value = stripcslashes($value);
-
-                  // 3️⃣ Attempt JSON decode
-                  $decoded = json_decode($value, true);
-
-                  // 4️⃣ If still NULL but the string *contains JSON characters* → try second decode
-                  if ($decoded === null && (str_contains($value, '[') || str_contains($value, '{'))) {
-                      $decoded = json_decode(stripcslashes($value), true);
-                  }
-
-                  // 5️⃣ Last fallback: try removing quotes again
-                  if ($decoded === null) {
-                      $value2 = trim($value, "\"'");
-                      $decoded = json_decode($value2, true);
-                  }
-
-                  return is_array($decoded) ? $decoded : [];
-              }
-          }
-
-
-                
-
-                  $class_list = tm_normalize_json($tm_class_list);
-                  echo esc_html(implode('-', $class_list));
-                  ?>
-              </span>
-
-                </div>
             </div>
 
             <div class="tm-cart-row">

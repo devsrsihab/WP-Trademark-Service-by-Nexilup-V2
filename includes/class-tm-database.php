@@ -174,7 +174,7 @@ class TM_Database {
             final_price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
             currency CHAR(3) NOT NULL DEFAULT 'USD',
 
-            status ENUM('draft','pending_payment','paid','in_process','completed','cancelled')
+            status ENUM('draft','pending_payment','processing','paid','in_process','on_hold','refunded','failed','completed','cancelled')
                 NOT NULL DEFAULT 'pending_payment',
 
             woo_order_id BIGINT(20) UNSIGNED DEFAULT NULL,
