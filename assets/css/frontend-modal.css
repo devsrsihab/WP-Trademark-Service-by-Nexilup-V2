@@ -126,7 +126,7 @@ button.tm-btn-primary.tm-close-service-conditions {
 }
 
 .tm-prices-tab.is-active {
-  background: #1a73e8;
+  background: var(--tm-primary);
   color: #fff;
   border-color: #1a73e8;
 }

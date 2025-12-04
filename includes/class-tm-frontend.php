@@ -59,6 +59,13 @@ class TM_Frontend {
             true
         );
 
+        wp_enqueue_style(
+            'tm-global-css',
+            WP_TMS_NEXILUP_PLUGIN_URL . 'assets/css/global.css',
+            [],
+            WP_TMS_NEXILUP_VERSION
+        );
+
 
         wp_register_style(
             'tm-frontend-css',

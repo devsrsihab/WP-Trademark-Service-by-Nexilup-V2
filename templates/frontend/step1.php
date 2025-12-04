@@ -52,7 +52,7 @@ $country_iso  = esc_attr($country->iso_code);
           <div class="tm-type-grid" id="tm-type-grid">
             <!-- Word -->
             <label class="tm-type-card is-active" data-type="word">
-              <input type="radio" name="tm-type" value="word" checked />
+              <input class="tm-type-radio" type="radio" name="tm-type" value="word" checked />
               <div class="tm-type-title">Word Mark</div>
               <div class="tm-type-preview word-preview">
                 <div class="tm-preview-text">YOUR BRAND</div>
@@ -61,7 +61,7 @@ $country_iso  = esc_attr($country->iso_code);
 
             <!-- Figurative -->
             <label class="tm-type-card" data-type="figurative">
-              <input type="radio" name="tm-type" value="figurative" />
+              <input class="tm-type-radio" type="radio" name="tm-type" value="figurative" />
               <div class="tm-type-title">Figurative Mark</div>
               <div class="tm-type-preview figurative-preview">
                 <img src="<?php echo esc_url(WP_TMS_NEXILUP_URL . 'assets/img/figurative-mark.png'); ?>" alt="Figurative">
@@ -70,7 +70,7 @@ $country_iso  = esc_attr($country->iso_code);
 
             <!-- Combined -->
             <label class="tm-type-card" data-type="combined">
-              <input type="radio" name="tm-type" value="combined" />
+              <input class="tm-type-radio" type="radio" name="tm-type" value="combined" />
               <div class="tm-type-title">Combined Mark</div>
               <div class="tm-type-preview combined-preview">
                 <img src="<?php echo esc_url(WP_TMS_NEXILUP_URL . 'assets/img/figurative-mark.png'); ?>" alt="Combined">
@@ -180,7 +180,7 @@ $country_iso  = esc_attr($country->iso_code);
 
                   <div class="tm-class-col tm-class-desc-col">
                     <label class="tm-small-label">
-                      List the goods or services of this class that will be used in connection with your trademark.
+                      List the goods or services of this class .
                     </label>
                     <textarea class="tm-class-desc" rows="2"></textarea>
                   </div>
@@ -319,7 +319,7 @@ $country_iso  = esc_attr($country->iso_code);
                   <span class="tm-class-total" id="tm-class-total">$0.00</span>
                 
               </div>  
-            <div>
+            <div class="tm-class-modal-buttons">
                 <button type="button" id="tm-class-cancel" class="tm-btn-cancel">Cancel</button>
                 <button type="button" id="tm-class-confirm" class="tm-btn-confirm">Confirm</button>
             </div>

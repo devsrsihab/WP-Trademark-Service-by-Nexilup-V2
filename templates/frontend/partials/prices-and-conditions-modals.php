@@ -55,9 +55,7 @@ $has_any_sc = ($sc_item && trim($sc_item->content) !== "");
             <strong><?php echo esc_html($country->country_name); ?></strong>.
         </p>
 
-        <p class="tm-modal-currency-note">
-            Prices are in <?php echo esc_html($currency); ?> U.S. Dollar
-        </p>
+
 
         <!-- Tabs -->
         <div class="tm-modal-tabs">
