@@ -42,9 +42,24 @@ $selected_type = isset($_GET['type']) ? sanitize_text_field($_GET['type']) : 'wo
     <div class="tm-filter-right">
         <label class="tm-filter-label">Trademark Type:</label>
 
-        <label class="tm-radio"><input type="radio" name="type" value="word" checked> Word Mark</label>
-        <label class="tm-radio"><input type="radio" name="type" value="figurative"> Figurative Mark</label>
-        <label class="tm-radio"><input type="radio" name="type" value="combined"> Combined Mark</label>
+        <label class="tm-radio">
+            <input type="radio" name="type" value="word" 
+                <?php echo ($selected_type === 'word') ? 'checked' : ''; ?>>
+            Word Mark
+        </label>
+
+        <label class="tm-radio">
+            <input type="radio" name="type" value="figurative"
+                <?php echo ($selected_type === 'figurative') ? 'checked' : ''; ?>>
+            Figurative Mark
+        </label>
+
+        <label class="tm-radio">
+            <input type="radio" name="type" value="combined"
+                <?php echo ($selected_type === 'combined') ? 'checked' : ''; ?>>
+            Combined Mark
+        </label>
+
     </div>
 
 </form>
