@@ -59,10 +59,24 @@ $trademarks = $wpdb->get_results(
                         <div class="tm-info-row">
                             <label>Classes</label>
                             <div class="value">
-                                <?php 
+                                <?php
+                                    // First decode
                                     $list = json_decode($tm->class_list, true);
-                                    echo $list ? implode(', ', $list) : '—';
+
+                                    // If still not array, it means JSON was double-encoded
+                                    if (!is_array($list)) {
+                                        $list = stripslashes($list);
+                                        $list = json_decode($list, true);
+                                    }
+
+                                    // Final fallback
+                                    if (empty($list) || !is_array($list)) {
+                                        echo '1';
+                                    } else {
+                                        echo implode(', ', $list);
+                                    }
                                 ?>
+
                             </div>
                         </div>
 
