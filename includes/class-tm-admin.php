@@ -10,9 +10,64 @@ class TM_Admin {
             add_action( 'admin_menu', array( __CLASS__, 'register_menus' ) );
             add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
             add_action('wp_ajax_tm_get_trademark_details', [__CLASS__, 'ajax_get_trademark_details']);
+            add_action('admin_init', [__CLASS__, 'register_settings']);
+            add_action('admin_init', [__CLASS__, 'block_pages_until_configured']);
 
         }
     }
+
+
+    public static function register_settings() {
+         register_setting('tm_settings_group', 'tm_master_product_id');
+    }
+
+    public static function block_pages_until_configured() {
+
+        if (!self::is_master_product_missing()) {
+            return; // Everything OK — allow full plugin usage
+        }
+
+        // Get current page slug
+        $page = isset($_GET['page']) ? sanitize_text_field($_GET['page']) : '';
+
+        // Allow ONLY the settings page
+        if ($page !== 'tm-settings') {
+
+            // Add error message
+            add_action('admin_notices', function () {
+                echo '<div class="notice notice-error"><p>
+                        ⚠ <strong>Trademark Service is not configured.</strong><br>
+                        Please select the Master WooCommerce Product in Settings.
+                        <br><br>
+                        <a href="' . admin_url('admin.php?page=tm-settings') . '" class="button button-primary">
+                            Go to Settings
+                        </a>
+                    </p></div>';
+            });
+
+            // Remove the ability to use other plugin pages
+            add_filter('allowed_options', '__return_empty_array');
+
+            // Stop template rendering for other TM pages
+            add_filter('template_include', function($template) use ($page) {
+                if (strpos($page, 'tm-') !== false && $page !== 'tm-settings') {
+                    return WP_TMS_NEXILUP_PLUGIN_PATH . 'templates/admin/blocked.php';
+                }
+                return $template;
+            });
+        }
+    }
+
+
+
+    public static function is_master_product_missing() {
+        $product_id = get_option('tm_master_product_id');
+        return empty($product_id);
+    }
+
+
+
+
 
 
     public static function ajax_get_trademark_details() {
@@ -82,14 +137,6 @@ class TM_Admin {
             array( __CLASS__, 'render_service_conditions_page' )
         );
 
-        // add_submenu_page(
-        //     'tm-dashboard',
-        //     __( 'Settings', 'wp-tms-nexilup' ),
-        //     __( 'Settings', 'wp-tms-nexilup' ),
-        //     'manage_options',
-        //     'tm-settings',
-        //     array( __CLASS__, 'render_settings_page' )
-        // );
         add_submenu_page(
             'tm-dashboard',
             __( 'Trademarks', 'wp-tms-nexilup' ),
@@ -97,6 +144,15 @@ class TM_Admin {
             'manage_options',
             'tm-trademarks',
             array( __CLASS__, 'render_trademarks_page' )
+        );
+
+        add_submenu_page(
+            'tm-dashboard',
+            __( 'Settings', 'wp-tms-nexilup' ),
+            __( 'Settings', 'wp-tms-nexilup' ),
+            'manage_options',
+            'tm-settings',
+            array( __CLASS__, 'render_settings_page' )
         );
 
     }
@@ -214,9 +270,9 @@ class TM_Admin {
         self::load_template( 'service-conditions.php' );
     }
 
-    // public static function render_settings_page() {
-    //     self::load_template( 'settings.php' );
-    // }
+    public static function render_settings_page() {
+        self::load_template( 'settings.php' );
+    }
 
     /**
      * Template loader
@@ -230,5 +286,8 @@ class TM_Admin {
             echo '<div class="wrap"><h1>Template Missing</h1><p>' . esc_html( $file ) . ' not found.</p></div>';
         }
     }
+
+
+
 
 }
