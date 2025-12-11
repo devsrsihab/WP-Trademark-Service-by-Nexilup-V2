@@ -51,9 +51,7 @@ update_option('tm_last_country_id', $country_id);
 
           <?php foreach ( WC()->cart->get_cart() as $cart_item_key => $item ):
 
-          // var_dump($item);
 
-            // var_dump($item['tm_logo_url']);
             // -------- GET TM DATA (nested OR flattened) ----------
             if (!empty($item['tm_data'])) {
                 $tm = $item['tm_data'];

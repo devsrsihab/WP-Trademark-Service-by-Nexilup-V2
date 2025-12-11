@@ -27,16 +27,7 @@
             <h1>Trademark Service Dashboard</h1>
             <p class="tm-dashboard-subtitle">Manage all Trademark Service configurations and data.</p>
         </div>
-        <div class="tm-header-actions">
-            <div class="tm-search-box">
-                <input type="text" placeholder="Search...">
-                <i class="fas fa-search"></i>
-            </div>
-            <div class="tm-notification-icon">
-                <i class="fas fa-bell"></i>
-                <span class="tm-badge">3</span>
-            </div>
-        </div>
+
     </div>
 
     <?php 

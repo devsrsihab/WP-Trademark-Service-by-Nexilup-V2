@@ -56,6 +56,7 @@ public static function add_country() {
     $multi_class       = sanitize_text_field($_POST['multi_class']);
     $evidence_required = sanitize_text_field($_POST['evidence_required']);
     $protection_term   = sanitize_text_field($_POST['protection_term']);
+    $additional_fees   = sanitize_text_field($_POST['additional_fees']);
 
     // REMARK TYPE (Price rule)
     $general_remarks   = sanitize_text_field($_POST['general_remarks']);
@@ -101,6 +102,7 @@ public static function add_country() {
             'multi_class_allowed' => $multi_class,
             'evidence_required'   => $evidence_required,
             'protection_term'     => $protection_term,
+            'additional_fees'     => $additional_fees,
 
             'general_remarks'     => $general_remarks,
             'other_remarks'       => $other_remarks,
@@ -134,9 +136,11 @@ public static function add_country() {
             'multi_class'         => $multi_class,
             'evidence_required'   => $evidence_required,
             'protection_term'     => $protection_term,
+            'additional_fees'     => $additional_fees,
             'general_remarks'     => $general_remarks,
             'other_remarks'       => $other_remarks,
             'belt_and_road'       => $belt_road,
+            
             'status'              => 1
         ]
     ]);
@@ -173,6 +177,7 @@ public static function update_country() {
         'multi_class_allowed' => sanitize_text_field($_POST['multi_class']),
         'evidence_required'   => sanitize_text_field($_POST['evidence_required']),
         'protection_term'     => sanitize_text_field($_POST['protection_term']),
+        'additional_fees'     => sanitize_text_field($_POST['additional_fees']),
         'general_remarks'     => sanitize_text_field($_POST['general_remarks']),
         'other_remarks'       => sanitize_text_field($_POST['other_remarks']),
         'belt_and_road'       => intval($_POST['belt_road']),

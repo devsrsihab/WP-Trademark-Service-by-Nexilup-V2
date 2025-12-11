@@ -458,6 +458,3 @@ if (isset($data['tm_class_details'])) {
 }
 
 
-if (defined('TM_MASTER_PRODUCT_ID')) {
-    var_dump('TM_MASTER_PRODUCT_ID:', TM_MASTER_PRODUCT_ID);
-}

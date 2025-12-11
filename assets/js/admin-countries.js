@@ -298,6 +298,7 @@
       registration_time: $("#tm-registration-time").val(),
       opposition_period: $("#tm-opposition").val(),
       protection_term: $("#tm-protection-term").val(),
+      additional_fees: $("#additional-fees").val(),
 
       general_remarks: $("#tm-remark-type").val(),
       other_remarks: $("#tm-other-remarks").val(),
@@ -395,6 +396,7 @@
 ================================================ */
   $(document).on("click", ".tm-edit", function () {
     const row = $(this).closest("tr");
+    console.log("edit data", row.data());
 
     $("#tm-edit-id").val(row.data("id"));
     $("#tm-edit-name").val(row.data("name"));
@@ -408,11 +410,12 @@
     $("#tm-edit-registration-time").val(row.data("registration"));
     $("#tm-edit-opposition").val(row.data("opposition"));
     $("#tm-edit-protection-term").val(row.data("protection"));
+    $("#tm-edit-additional-fees").val(row.data("additional"));
 
     $("#tm-edit-remark-type").val(row.data("remark"));
     $("#tm-edit-other-remarks").val(row.data("other"));
 
-    $("#tm-edit-belt-road").val(row.data("belt"));
+    $("#tm-edit-belt-road").val(row.data("beltroad"));
     $("#tm-edit-status").val(row.data("status"));
 
     openModal("#tm-edit-modal");
@@ -441,6 +444,7 @@
         multi_class: $("#tm-edit-multiclass").val(),
         evidence_required: $("#tm-edit-evidence").val(),
         protection_term: $("#tm-edit-protection-term").val(),
+        additional_fees: $("#tm-edit-additional-fees").val(),
 
         general_remarks: $("#tm-edit-remark-type").val(),
         other_remarks: $("#tm-edit-other-remarks").val(),
@@ -509,4 +513,18 @@
       }
     );
   });
+
+  function characterLimiter(limitChar) {
+    const limit = limitChar;
+
+    $("td.additional_frees_data").each(function () {
+      let fullText = $.trim($(this).text());
+
+      if (fullText.length > limit) {
+        $(this).attr("title", fullText); // tooltip
+        $(this).text(fullText.substring(0, limit) + "...");
+      }
+    });
+  }
+  characterLimiter(12);
 })(jQuery);

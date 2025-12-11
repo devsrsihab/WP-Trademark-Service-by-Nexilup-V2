@@ -14,7 +14,7 @@ $nonce     = wp_create_nonce('tm_service_conditions_nonce');
 
     <h1 class="tm-page-title">Service Conditions</h1>
 
-    <button class="button button-primary" id="tm-add-condition-btn">+ Add Condition</button>
+    <button class="button button-primary mb_25" id="tm-add-condition-btn">+ Add Condition</button>
 
     <table class="wp-list-table widefat fixed striped mt-20">
         <thead>

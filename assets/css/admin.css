@@ -19,6 +19,9 @@
 .tm-pagination .tm-page-link:hover {
   background: #d5d5d5;
 }
+.mb_25 {
+  margin-bottom: 25px !important;
+}
 
 /* =========================== */
 /* End of File */

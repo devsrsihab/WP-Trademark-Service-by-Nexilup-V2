@@ -13,7 +13,7 @@ $step_image = trailingslashit(WP_TMS_NEXILUP_PLUGIN_URL) . 'assets/img/step.webp
 
 $step1_url = add_query_arg(['country' => $country->iso_code], site_url('/tm/trademark-choose/order-form'));
 $step2_url = add_query_arg(['country' => $country->iso_code], site_url('/tm/trademark-choose/order-form?tm_additional_class=1'));
-$step3_url = add_query_arg(['country' => $country->iso_code], site_url('/myaccount/my-trademarks/active-trademarks'));
+$step3_url = add_query_arg(['country' => $country->iso_code], site_url('/tm-account/?section=active'));
 ?>
 
 <div class="tm-country-single-page">
@@ -104,7 +104,7 @@ $step3_url = add_query_arg(['country' => $country->iso_code], site_url('/myaccou
 
             <div class="tm-nominus-step-actions">
                 <a href="<?php echo esc_url($step3_url); ?>" class="tm-nominus-order-btn">Order</a>
-                <a href="#" class="tm-nominus-prices-link tm-open-prices-modal">>> Prices</a>
+                <a href="" class="tm-nominus-prices-link tm-open-prices-modal">>> Prices</a>
             </div>
         </div>
     </div>

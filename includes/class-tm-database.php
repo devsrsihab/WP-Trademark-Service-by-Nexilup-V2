@@ -54,6 +54,7 @@ class TM_Database {
             multi_class_allowed VARCHAR(20) DEFAULT NULL,
             evidence_required VARCHAR(20) DEFAULT NULL,
             protection_term VARCHAR(255) DEFAULT NULL,
+            additional_fees VARCHAR(255) DEFAULT NULL,
 
             general_remarks VARCHAR(255) DEFAULT NULL,
             other_remarks TEXT DEFAULT NULL,

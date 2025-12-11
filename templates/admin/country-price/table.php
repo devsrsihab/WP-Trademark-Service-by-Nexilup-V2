@@ -8,11 +8,13 @@ $prices = $data['items'];
 $nonce  = wp_create_nonce('tm_country_prices_nonce');
 ?>
 
+<link rel="stylesheet" href="<?php echo WP_TMS_NEXILUP_PLUGIN_URL . 'assets/css/admin.css'; ?>">
+
 <div class="wrap tm-wrap">
 
     <h1 class="tm-page-title">Country Prices</h1>
 
-    <a href="?page=tm-country-prices&action=add" class="button button-primary">
+    <a href="?page=tm-country-prices&action=add" class="button mb_25 button-primary">
         + Add Country Price
     </a>
 

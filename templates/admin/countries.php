@@ -22,7 +22,7 @@ $nonce = wp_create_nonce('tm_countries_nonce');
     <div class="tm-header">
         <h1>Manage Countries</h1>
 
-        <div class="tm-actions">
+        <div class="tm-actions mb_25">
             <button class="button button-primary" id="tm-add-country-btn">+ Add Country</button>
             <button class="button button-secondary" id="tm-bulk-add-btn">Bulk Import</button>
         </div>
@@ -39,6 +39,7 @@ $nonce = wp_create_nonce('tm_countries_nonce');
                 <th>Multi-Class</th>
                 <th>Evidence</th>
                 <th>Protection</th>
+                <th>Additional Fees</th>
                 <th>Belt & Road</th>
                 <th>Status</th>
                 <th width="140">Actions</th>
@@ -60,6 +61,8 @@ $nonce = wp_create_nonce('tm_countries_nonce');
                         data-multi="<?php echo esc_attr($c->multi_class_allowed); ?>"
                         data-evidence="<?php echo esc_attr($c->evidence_required); ?>"
                         data-protection="<?php echo esc_attr($c->protection_term); ?>"
+                        data-additional="<?php echo esc_attr($c->additional_fees); ?>"
+
                         data-general="<?php echo esc_attr($c->general_remarks); ?>"
                         data-other="<?php echo esc_attr($c->other_remarks); ?>"
                         data-beltroad="<?php echo esc_attr($c->belt_and_road); ?>"
@@ -73,6 +76,7 @@ $nonce = wp_create_nonce('tm_countries_nonce');
                         <td><?php echo esc_html($c->multi_class_allowed ?: '—'); ?></td>
                         <td><?php echo esc_html($c->evidence_required ?: '—'); ?></td>
                         <td><?php echo esc_html($c->protection_term ?: '—'); ?></td>
+                        <td class="additional_frees_data" ><?php echo esc_html($c->additional_fees ?: '—'); ?></td>
                         <td><?php echo $c->belt_and_road ? "Yes" : "No"; ?></td>
 
                         <td>
@@ -190,6 +194,12 @@ $nonce = wp_create_nonce('tm_countries_nonce');
             <input type="text" id="tm-protection-term" placeholder="Example: 10 years">
         </div>
 
+        <!-- Additional Fees (Notarization & Authentication Priority Claim / Others) -->
+        <div class="tm-field">
+            <label>Additional Fees (Notarization & Authentication Priority Claim / Others)</label>
+            <input type="text" id="additional-fees" placeholder="Additional Fees">
+        </div>
+
 
 
         <!-- Belt and Road -->
@@ -292,20 +302,12 @@ $nonce = wp_create_nonce('tm_countries_nonce');
             <input type="text" id="tm-edit-protection-term" placeholder="Example: 10 years">
         </div>
 
+
         <div class="tm-field">
-            <label>Pricing Remark (Fee Rule)</label>
-            <select id="tm-edit-remark-type">
-                <option value="">Select a pricing rule</option>
-                <option value="filing_20_goods">Filing Fee — includes up to 20 goods</option>
-                <option value="filing_basic">Filing Fee — basic per class</option>
-                <option value="registration_5_years">Registration Fee — valid for 5 years</option>
-                <option value="registration_10_years">Registration Fee — valid for 10 years</option>
-                <option value="registration_after_acceptance">
-                    Registration Fee — payable only after acceptance
-                </option>
-                <option value="filing_only">Only Filing Fee (No Registration Fee)</option>
-            </select>
+            <label>Additional Fees</label>
+            <input type="text" id="tm-edit-additional-fees" placeholder="Additional Fees">
         </div>
+
 
         <div class="tm-field">
             <label>Belt & Road Member?</label>
